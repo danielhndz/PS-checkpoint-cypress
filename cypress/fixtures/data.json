@@ -1,0 +1,8 @@
+{
+  "incorrectEmail": "thisemaildontexists@testing.com",
+  "incorrectPassword": "hello@cypress.io",
+  "correctFirstName": "yubx",
+  "correctLastName": "fnirls",
+  "correctEmail": "yubxfnirls@pretreer.com",
+  "correctPassword": "dNAn6ddGWU694z"
+}
