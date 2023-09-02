@@ -9,13 +9,8 @@
   "author": "Daniel Hernández",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.1.0",
-    "cypress-cucumber-preprocessor": "^4.3.1",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
-  },
-  "cypress-cucumber-preprocessor": {
-    "nonGlobalStepDefinitions": true
+    "@badeball/cypress-cucumber-preprocessor": "^18.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "cypress": "^13.1.0"
   }
 }

@@ -4,5 +4,11 @@
   "correctFirstName": "yubx",
   "correctLastName": "fnirls",
   "correctEmail": "yubxfnirls@pretreer.com",
-  "correctPassword": "dNAn6ddGWU694z"
+  "correctPassword": "dNAn6ddGWU694z",
+  "failedLoginMessage": "The password or email you entered is incorrect",
+  "item": "Guitar",
+  "brand": "Fender",
+  "model": "Stratocaster",
+  "artist": "Jimi Hendrix",
+  "title": "The Lord of the Rings"
 }

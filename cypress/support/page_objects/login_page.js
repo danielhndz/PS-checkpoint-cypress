@@ -1,11 +1,9 @@
-import { closeLocationPopupIfAppears } from "../utils.cy";
-
 export class LoginPage {
   navigate() {
     cy.visit(Cypress.env("baseUrl"));
-    closeLocationPopupIfAppears();
+    cy.closeLocationPopupIfAppears();
     cy.get("nav[role] a[href*='signin']").click();
-    closeLocationPopupIfAppears();
+    cy.closeLocationPopupIfAppears();
   }
 
   enterUsernamePassword(username, password) {

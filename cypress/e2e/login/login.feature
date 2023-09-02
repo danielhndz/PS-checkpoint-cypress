@@ -1,4 +1,4 @@
-Feature:  I want to login into the site with valid data
+Feature:  Login
   
   Scenario: User enters valid data
     Given the user is on the login page

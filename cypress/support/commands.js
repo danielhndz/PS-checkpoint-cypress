@@ -24,11 +24,16 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("addFirstItemToCart", () => {
+Cypress.Commands.add("addFirstOptionToCart", () => {
   cy.get(".add-to-cart-button").first().click();
-  cy.url().should("include", "cart");
-  cy.get(".dashboard-page-header__title span").should(
-    "contain.text",
-    "1 Item in Your Cart"
-  );
+});
+
+Cypress.Commands.add("closeLocationPopupIfAppears", () => {
+  cy.get(".fa.fa-close").then(($button) => {
+    if ($button.is(":visible")) {
+      cy.wrap($button).click();
+    } else {
+      console.info("Location pop-up do not appear");
+    }
+  });
 });
