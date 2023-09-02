@@ -1,44 +1,81 @@
 /// <reference types="Cypress"/>
 
-let artist = "jimi-hendrix";
+import { closeLocationPopupIfAppears } from "./utils.cy";
 
-describe("cart interactions", () => {
-  before(() => {
+let item = "Guitar";
+let brand = "Fender";
+let model = "Stratocaster";
+let artist = "Jimi Hendrix";
+
+describe("Workarounds for an item that does not ship to Colombia", () => {
+  beforeEach(() => {
     cy.visit(Cypress.env("baseUrl"));
-    closeLocationPopup();
+    closeLocationPopupIfAppears();
   });
 
-  it("search for, add, and remove item from the cart", () => {
-    cy.get(
-      "ul button.category-flyout-header__link[data-header-category='guitars']"
-    ).click();
-    cy.get("a.category-flyout__link[href*='stratocaster']").click();
-    cy.url().should("include", "stratocaster");
-    closeLocationPopup();
-    cy.get(".page-hero__title").contains("Fender Stratocaster");
-    cy.get("div.dynamic-page__sidebar a[href*='" + artist + "']").click();
-    cy.url().should("include", artist);
-    cy.get(".page-hero__title")
-      .contains("Jimi Hendrix")
-      .and("contain", "Stratocaster");
-    cy.get("a[href$='fender-" + artist + "-stratocaster']").click();
-    cy.get(".csp2-header__title").contains("Fender Jimi Hendrix Stratocaster");
-    cy.get(".rc-alert-box__content").should("be.visible");
-    cy.get("li:first-child.tiles__tile button.add-to-cart-button").click();
-    cy.url().should("include", "cart");
-    cy.get(".dashboard-page-header__title span").contains(
-      "1 Item in Your Cart"
-    );
-    cy.get(".cart-item .d-flex a[class]").contains(
-      "Fender Jimi Hendrix Stratocaster, Olympic White, Maple B Stock"
-    );
+  it("looking for an option", () => {
+    lookingForAnItemSuchAsDescribed(item, brand, model, artist);
+    // Add to cart button of an available option
+    cy.get(".add-to-cart-button").first().should("be.visible");
+  });
+
+  it("Add to cart the first option", () => {
+    lookingForAnItemSuchAsDescribed(item, brand, model, artist);
+    cy.addFirstItemToCart();
+  });
+
+  it("Remove from cart the first option", () => {
+    lookingForAnItemSuchAsDescribed(item, brand, model, artist);
+    cy.addFirstItemToCart();
+    cy.get("[data-toggle-confirmation]").click();
+    cy.get(".site-wrapper--narrow h2").should("contain.text", "cart is empty");
   });
 });
 
-function closeLocationPopup() {
-  try {
-    cy.get(".fa.fa-close").click();
-  } catch (error) {
-    // nothing to do
-  }
+// Such as described means an item that does not ship to Colombia
+function lookingForAnItemSuchAsDescribed(item, brand, model, artist) {
+  let selector =
+    "ul button.category-flyout-header__link[data-header-category='".concat(
+      item.toLowerCase(),
+      "s']"
+    );
+  cy.get(selector).click();
+  selector = "a.category-flyout__link[href*='".concat(
+    model.toLowerCase(),
+    "']"
+  );
+  cy.get(selector).click();
+  cy.url().should("include", model.toLowerCase());
+  closeLocationPopupIfAppears();
+  cy.get(".page-hero__title").should("have.text", brand.concat(" ", model));
+  selector = "div.dynamic-page__sidebar a[href*='".concat(
+    formatArtistName(artist),
+    "']"
+  );
+  cy.get(selector).click();
+  cy.url().should("include", formatArtistName(artist));
+  cy.get(".page-hero__title").should(
+    "have.text",
+    brand.concat(" ", artist, " ", model)
+  );
+  selector = "a[href$='".concat(
+    brand.toLowerCase(),
+    "-",
+    formatArtistName(artist),
+    "-",
+    model.toLowerCase(),
+    "']"
+  );
+  cy.get(selector).click();
+  cy.get(".csp2-header__title").should(
+    "have.text",
+    brand.concat(" ", artist, " ", model)
+  );
+  // Alert about the item that does not ship to Colombia
+  cy.get(".rc-alert-box__content").should("be.visible");
+}
+
+function formatArtistName(name) {
+  let nameFormatted = "" + name;
+  return nameFormatted.toLowerCase().replace(" ", "-");
 }

@@ -23,3 +23,12 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("addFirstItemToCart", () => {
+  cy.get(".add-to-cart-button").first().click();
+  cy.url().should("include", "cart");
+  cy.get(".dashboard-page-header__title span").should(
+    "contain.text",
+    "1 Item in Your Cart"
+  );
+});
